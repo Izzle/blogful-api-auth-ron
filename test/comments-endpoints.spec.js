@@ -47,7 +47,6 @@ describe('Comments Endpoints', function() {
       const newComment = {
         text: 'Test new comment',
         article_id: testArticle.id,
-        user_id: testUser.id,
       }
       return supertest(app)
         .post('/api/comments')
@@ -73,7 +72,7 @@ describe('Comments Endpoints', function() {
             .then(row => {
               expect(row.text).to.eql(newComment.text)
               expect(row.article_id).to.eql(newComment.article_id)
-              expect(row.user_id).to.eql(newComment.user_id)
+              expect(row.user_id).to.eql(testUser.id)
               const expectedDate = new Date().toLocaleString('en', { timeZone: 'UTC' })
               const actualDate = new Date(row.date_created).toLocaleString()
               expect(actualDate).to.eql(expectedDate)
@@ -81,14 +80,13 @@ describe('Comments Endpoints', function() {
         )
     })
 
-    const requiredFields = ['text', 'user_id', 'article_id']
+    const requiredFields = ['text', 'article_id']
 
     requiredFields.forEach(field => {
       const testArticle = testArticles[0]
       const testUser = testUsers[0]
       const newComment = {
         text: 'Test new comment',
-        user_id: testUser.id,
         article_id: testArticle.id,
       }
 
